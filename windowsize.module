@@ -54,7 +54,6 @@ function windowsize_menu() {
     'file' => 'inc/windowsize.admin.inc',
     'type' => MENU_NORMAL_ITEM,
   );
-
   return $items;
 }
 
@@ -87,49 +86,47 @@ function windowsize_block_info() {
  */
 function windowsize_block_view($block_name = '') {
   if ($block_name == 'windowsize') {
-    $infoBox = "
-          <pre class='windowsizeInfo'>
-@screen-xs-min (480px)
-@screen-xs-max (479px)
-@screen-phone
-<em>@media (max-width: @screen-xs-max) { ... }</em>
-
-@screen-sm-min (768px)
-@screen-sm-max (991px)
-@screen-tablet
-<em>@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) { ... }</em>
-
-@screen-md-min (992px)
-@screen-md-max (1199px)
-@screen-desktop
-<em>@media (min-width: @screen-md-min) and (max-width: @screen-md-max) { ... }</em>
-
-@screen-lg-min (1200px)
-@screen-lg-desktop
-<em>@media (min-width: @screen-lg-min) { ... }</em>
-            </pre>
-      ";
-    
     $block = array(
       'subject' => t('BS 3.x Breakpoint'),
       'content' => '
       <h3 class="clearfix windowsize">
-        <div class="visible-xs">
+        <p class="visible-xs clearfix">
           <span class="label label-success pull-right">XS</span>
-        </div>
-        <div class="visible-sm">
+        </p>
+        <pre class="windowsizeInfo visible-xs">
+// xs 480px and below
+@screen-xs-min
+@screen-xs-max
+<em>@media (max-width: @screen-xs-max) { ... }</em>
+        </pre>
+        <p class="visible-sm clearfix">
           <span class="label label-success pull-right">SM</span>
-        </div>
-        <div class="visible-md">
+        </p>
+        <pre class="windowsizeInfo visible-sm">
+// sm 767px and below
+@screen-sm-min
+@screen-sm-max
+<em>@media (min-width: @screen-sm-min) and (max-width: @screen-md-min) { ... }</em>
+        </pre>
+        <p class="visible-md clearfix">
           <span class="label label-success pull-right">MD</span>
-        </div>
-        <div class="visible-lg">
+        </p>
+        <pre class="windowsizeInfo visible-md">
+// md 768px and above
+@screen-md-min
+@screen-md-max
+<em>@media (min-width: @screen-md-min) and (max-width: @screen-lg-max) { ... }</em>
+        </pre>
+        <p class="visible-lg clearfix">
           <span class="label label-success pull-right">LG</span>
-        </div>
+        </p>
+        <pre class="windowsizeInfo visible-lg">
+// lg 980px and up
+@screen-lg-min
+<em>@media (min-width: @screen-lg-min) { ... }</em>
+        </pre>
       </h3>'
-      .$infoBox,
     );
-    
     return $block;
   }
 }
