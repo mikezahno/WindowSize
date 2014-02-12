@@ -1,0 +1,135 @@
+<?php
+
+/**
+ * Implements hook_init().
+ */
+function windowsize_init() {
+  if ((user_access('view WindowSize')) && (variable_get('toggle_windowsize'))) {
+    windowsize_show_widget();
+  }
+}
+
+function windowsize_show_widget() {
+  $toggle = variable_get('windowsize_toggle');
+  if (!$toggle) {
+    $toggle = 0;
+  }
+  $position = variable_get('windowsize_position');
+  if (!$position) {
+    $position = 'top-left';
+  }
+  $adminpage = variable_get('windowsize_adminpage');
+  if (!$adminpage) {
+    $adminpage = 0;
+  }
+  $breakpoints = variable_get('windowsize_breakpoints');
+  if (!$breakpoints) {
+    $breakpoints = 0;
+  }
+  if (path_is_admin(current_path())) {
+    $mode = 1;
+  } else {
+    $mode = 0;
+  }
+  
+  drupal_add_js(array('windowsize_position' => $position), 'setting');
+  drupal_add_js(array('windowsize_breakpoints' => $breakpoints), 'setting');
+  drupal_add_js(array('windowsize_adminpage' => $adminpage), 'setting');
+  drupal_add_js(array('windowsize_adminmode' => $mode), 'setting');
+  drupal_add_js(drupal_get_path('module', 'windowsize') . '/windowsize.js');
+  drupal_add_css(drupal_get_path('module', 'windowsize') . '/windowsize.css');
+}
+
+
+/**
+ * Implements hook_menu().
+ */
+function windowsize_menu() {
+  $items['admin/config/development/window-size'] = array(
+    'title' => 'WindowSize',
+    'description' => 'Configure how WindowSize will be presented.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('windowsize_admin_settings_form'),
+    'access arguments' => array('access administration pages'),
+    'file' => 'inc/windowsize.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_perm().
+ */
+function windowsize_permission() {
+  return array(
+    'view WindowSize' => array(
+      'title' => t('View WindowSize'),
+      'description' => t('View the window size box'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function windowsize_block_info() {
+  $blocks = array();
+  $blocks['windowsize'] = array(
+    'info' => t('BS 3.x Breakpoint'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function windowsize_block_view($block_name = '') {
+  if ($block_name == 'windowsize') {
+    $infoBox = "
+          <pre class='windowsizeInfo'>
+@screen-xs-min (480px)
+@screen-xs-max (479px)
+@screen-phone
+<em>@media (max-width: @screen-xs-max) { ... }</em>
+
+@screen-sm-min (768px)
+@screen-sm-max (991px)
+@screen-tablet
+<em>@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) { ... }</em>
+
+@screen-md-min (992px)
+@screen-md-max (1199px)
+@screen-desktop
+<em>@media (min-width: @screen-md-min) and (max-width: @screen-md-max) { ... }</em>
+
+@screen-lg-min (1200px)
+@screen-lg-desktop
+<em>@media (min-width: @screen-lg-min) { ... }</em>
+            </pre>
+      ";
+    
+    $block = array(
+      'subject' => t('BS 3.x Breakpoint'),
+      'content' => '
+      <h3 class="clearfix windowsize">
+        <div class="visible-xs">
+          <span class="label label-success pull-right">XS</span>
+        </div>
+        <div class="visible-sm">
+          <span class="label label-success pull-right">SM</span>
+        </div>
+        <div class="visible-md">
+          <span class="label label-success pull-right">MD</span>
+        </div>
+        <div class="visible-lg">
+          <span class="label label-success pull-right">LG</span>
+        </div>
+      </h3>'
+      .$infoBox,
+    );
+    
+    return $block;
+  }
+}

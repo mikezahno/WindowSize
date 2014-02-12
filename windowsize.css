@@ -1,0 +1,45 @@
+div#windowsize {
+   position:fixed;
+   color: #fff;
+   padding: 3px 8px;
+   font-size: 12px;
+   background-color: rgba(128, 128, 128, 0.92);
+   margin:10px;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border-radius: 5px;
+   z-index:100;
+ }
+div#windowsize.top-left {
+  left: 10px;
+  top: 10px;
+}
+div#windowsize.top-right {
+  right: 10px;
+  top: 10px;
+}
+div#windowsize.bottom-left {
+  left: 10px;
+  bottom: 10px;
+}
+div#windowsize.bottom-right {
+  right: 10px;
+  bottom: 10px;
+}
+body.admin-menu div#windowsize.top-left,
+body.toolbar div#windowsize.top-left {
+  top: 30px;
+}
+
+/*h3.windowsize {
+  background-color: yellow;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, #aaa 35px, #aaa 70px);
+}*/
+
+.windowsizeInfo {
+  font-size: 8px;
+  color: gray;
+}
+.windowsizeInfo em {
+  color: blue;
+}
